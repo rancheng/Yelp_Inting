@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Yelp RC</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="/static/assets/css/main.css"/>
+    <noscript>
+        <link rel="stylesheet" href="/static/assets/css/noscript.css"/>
+    </noscript>
+</head>
+<body class="is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Main -->
+    <section id="main">
+        <h1>Yelp For U</h1>
+        <header>
+            <span class="avatar"><img width="122" src="/static/images/yelp.png" alt=""/></span>
+            <p>Choose a snippet intriguing for you </p>
+{#            <div class="flash">#}
+{#                <img src="/static/images/icons8-synchronize-48.png" alt="flash"/>#}
+{#            </div>#}
+        </header>
+        <!--
+        <hr />
+        <h2>Extra Stuff!</h2>
+        <form method="post" action="#">
+            <div class="fields">
+                <div class="field">
+                    <input type="text" name="name" id="name" placeholder="Name" />
+                </div>
+                <div class="field">
+                    <input type="email" name="email" id="email" placeholder="Email" />
+                </div>
+                <div class="field">
+                    <select name="department" id="department">
+                        <option value="">Department</option>
+                        <option value="sales">Sales</option>
+                        <option value="tech">Tech Support</option>
+                        <option value="null">/dev/null</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <textarea name="message" id="message" placeholder="Message" rows="4"></textarea>
+                </div>
+                <div class="field">
+                    <input type="checkbox" id="human" name="human" /><label for="human">I'm a human</label>
+                </div>
+                <div class="field">
+                    <label>But are you a robot?</label>
+                    <input type="radio" id="robot_yes" name="robot" /><label for="robot_yes">Yes</label>
+                    <input type="radio" id="robot_no" name="robot" /><label for="robot_no">No</label>
+                </div>
+            </div>
+            <ul class="actions special">
+                <li><a href="#" class="button">Get Started</a></li>
+            </ul>
+        </form>
+        <hr />
+        -->
+        <footer>
+            <ul class="icons">
+                {% for keyword in kw_list %}
+                    <li><a id="kw_{{ loop.index - 1 }}" class="button" onclick="record_ints(this.id)">{{ keyword }}</a></li>
+                {% endfor %}
+            </ul>
+        </footer>
+
+        <div class="submit_section">
+            <a class="submit_btn" onclick="send_id_back();">Submit</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <ul class="copyright">
+            <li>&copy; Ke Wu</li>
+            <li>Made with ❤️ for u</li>
+        </ul>
+    </footer>
+
+</div>
+
+<!-- Scripts -->
+<script>
+    if ('addEventListener' in window) {
+        window.addEventListener('load', function () {
+            document.body.className = document.body.className.replace(/\bis-preload\b/, '');
+        });
+        document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+    }
+
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{
+  url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+<script src="/static/assets/js/kw_list.js"></script>
+{#<script>#}
+{#    $(".flash").click(function () {#}
+{#        $(this).addClass("animation-rotate");#}
+{#        //begin a request here#}
+{#    });#}
+{#      // stop when call this: $(document).ajaxStop()#}
+{#</script>#}
+<script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+</body>
+</html>

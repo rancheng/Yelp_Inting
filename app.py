@@ -1,8 +1,8 @@
 from flask import Flask, render_template, url_for, jsonify, request, redirect, session
 import os
 import json
-from flaskext.mysql import MySQL
-
+from flask_mysqldb import MySQL
+import recc
 
 SECRETE_KEY = os.urandom(24)
 
@@ -52,13 +52,31 @@ def __api_get_topic_list(topic_list):
     _b_list_updated = True
 
 
+def get_entry_by_id_list(b_id_l):
+    '''
+    get MySQL entry by business ID
+    :param b_id: a string id of yelp business
+    :return: json structured entry of data to send back to front end.
+    '''
+    b_idl_tup = tuple(b_id_l)
+    params = {'b_idl_tup': b_idl_tup}
+    cur = mysql.connect.cursor()
+    cur.execute('SELECT * FROM yelp WHERE business_id IN %(b_idl_tup)s', params)
+    row_headers = [x[0] for x in cur.description]  # this will extract row headers
+    rv = cur.fetchall()
+    json_data = []
+    for result in rv:
+        json_data.append(dict(zip(row_headers, result)))
+    return json.dumps(json_data)
+
+
 def get_entry_by_id(b_id):
     '''
     get MySQL entry by business ID
     :param b_id: a string id of yelp business
     :return: json structured entry of data to send back to front end.
     '''
-    cur = mysql.connect().cursor()
+    cur = mysql.connect.cursor()
     cur.execute('''SELECT * FROM yelp WHERE business_id = %s''', b_id)
     row_headers = [x[0] for x in cur.description]  # this will extract row headers
     rv = cur.fetchall()
@@ -92,7 +110,12 @@ def rec_frame():
         # print(idx)
         tmp_list = [keyword_list[a] for a in idx]
         # print(tmp_list)
-        return render_template('recc.html', my_string="Wheeeee!", my_list=tmp_list)
+        business_ids = recc.recommend_restaurants(tmp_list)
+        recc_res = json.loads(get_entry_by_id_list(business_ids))
+        les = len(recc_res)
+        print(les)
+        return render_template('recc.html', my_recc_res = recc_res)
+
 
 
 if __name__ == '__main__':
